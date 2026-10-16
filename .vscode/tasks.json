@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/ValheimMod.sln", "-c", "Debug"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "build (release)",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/ValheimMod.sln", "-c", "Release"],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

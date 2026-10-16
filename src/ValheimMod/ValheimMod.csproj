@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <AssemblyName>ValheimMod</AssemblyName>
+    <RootNamespace>ValheimMod</RootNamespace>
+    <Version>0.1.0</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <!-- Required by the publicizer so we can access private game members directly. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Lets us build net462 without the .NET Framework targeting pack installed. -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <!-- Strips private/protected from assembly_valheim at compile time so patches can touch internals. -->
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- BepInEx / Harmony (from the game's BepInEx install) -->
+  <ItemGroup>
+    <Reference Include="$(BepInExPath)\core\BepInEx.dll" Private="false" />
+    <Reference Include="$(BepInExPath)\core\0Harmony.dll" Private="false" />
+  </ItemGroup>
+
+  <!-- Valheim game assemblies -->
+  <ItemGroup>
+    <Reference Include="$(ValheimManaged)\assembly_valheim.dll" Publicize="true" Private="false" />
+    <Reference Include="$(ValheimManaged)\assembly_utils.dll" Publicize="true" Private="false" />
+    <Reference Include="$(ValheimManaged)\assembly_guiutils.dll" Private="false" />
+    <Reference Include="$(ValheimManaged)\gui_framework.dll" Private="false" />
+    <Reference Include="$(ValheimManaged)\SoftReferenceableAssets.dll" Private="false" />
+    <Reference Include="$(ValheimManaged)\Splatform.dll" Private="false" />
+    <Reference Include="$(ValheimManaged)\Unity.TextMeshPro.dll" Private="false" />
+    <Reference Include="$(ValheimManaged)\UnityEngine*.dll" Private="false" />
+  </ItemGroup>
+
+  <!-- Copy the built plugin into the game's BepInEx\plugins folder. -->
+  <Target Name="DeployToGame" AfterTargets="Build" Condition="'$(DeployToGame)' == 'true' And Exists('$(BepInExPath)\plugins')">
+    <ItemGroup>
+      <_DeployFiles Include="$(TargetDir)$(AssemblyName).dll;$(TargetDir)$(AssemblyName).pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_DeployFiles)" DestinationFolder="$(BepInExPath)\plugins\$(AssemblyName)" SkipUnchangedFiles="true" />
+    <Message Importance="high" Text="Deployed $(AssemblyName) to $(BepInExPath)\plugins\$(AssemblyName)" />
+  </Target>
+
+</Project>

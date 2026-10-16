@@ -1,0 +1,14 @@
+# Build output
+bin/
+obj/
+dist/
+*.user
+*.suo
+
+# IDEs
+.vs/
+.idea/
+*.DotSettings.user
+
+# Per-developer settings
+Environment.props

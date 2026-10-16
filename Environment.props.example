@@ -1,0 +1,6 @@
+<Project>
+  <!-- Copy to Environment.props and adjust. Environment.props is git-ignored so each dev can have their own path. -->
+  <PropertyGroup>
+    <ValheimPath>D:\SteamLibrary\steamapps\common\Valheim</ValheimPath>
+  </PropertyGroup>
+</Project>

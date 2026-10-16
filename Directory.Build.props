@@ -1,0 +1,17 @@
+<Project>
+  <!--
+    Shared build settings for every project in this repo.
+    To point at a different Valheim install on your machine, copy Environment.props.example
+    to Environment.props (git-ignored) and edit the path there.
+  -->
+  <Import Project="$(MSBuildThisFileDirectory)Environment.props" Condition="Exists('$(MSBuildThisFileDirectory)Environment.props')" />
+
+  <PropertyGroup>
+    <ValheimPath Condition="'$(ValheimPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Valheim</ValheimPath>
+    <ValheimManaged>$(ValheimPath)\valheim_Data\Managed</ValheimManaged>
+    <BepInExPath>$(ValheimPath)\BepInEx</BepInExPath>
+
+    <!-- Set to false (e.g. `dotnet build -p:DeployToGame=false`) to skip copying the build into BepInEx\plugins. -->
+    <DeployToGame Condition="'$(DeployToGame)' == ''">true</DeployToGame>
+  </PropertyGroup>
+</Project>
